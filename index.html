@@ -37,7 +37,7 @@
       opacity: 0 !important;
     }
 
-    /* Viewer Count Badge */
+    /* Viewer Count */
     #viewerCount {
       position: fixed;
       top: 20px;
@@ -100,32 +100,18 @@
   <!-- Viewer Count -->
   <div id="viewerCount">Viewers: 0</div>
 
-  <!-- Chrome Only Modal -->
-  <div id="chromeModal" class="modal hidden" role="dialog" aria-modal="true">
-    <div class="modal-content">
-      <h2>Please Open in Chrome</h2>
-      <p>This site is optimized for <strong>Google Chrome</strong>. Please open the link in Chrome browser for the best experience.</p>
-    </div>
-  </div>
-
   <!-- Video Player -->
   <div class="shaka-video-container" data-shaka-player>
-    <video autoplay playsinline preload="metadata" poster=""></video>
+    <video autoplay playsinline preload="metadata"
+      poster="https://raw.githubusercontent.com/hardiksoni85555-max/images/refs/heads/main/open%20link%20in%20chrome.png">
+    </video>
   </div>
 
   <script>
     document.addEventListener('DOMContentLoaded', async () => {
-
       /********** Chrome check **********/
-      const isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
-      if (!isChrome) {
-        const chromeModal = document.getElementById('chromeModal');
-        chromeModal.classList.remove('hidden');
-        chromeModal.setAttribute('aria-hidden', 'false');
-        return;
-      }
 
-      /********** WebSocket for live viewers **********/
+      /********** WebSocket Viewer Count **********/
       const viewerCountEl = document.getElementById('viewerCount');
       const protocol = window.location.protocol === "https:" ? "wss" : "ws";
       const ws = new WebSocket(`${protocol}://${window.location.host}`);
@@ -136,7 +122,9 @@
           if (data.type === 'viewerCount') {
             viewerCountEl.textContent = `Viewers: ${data.count}`;
           }
-        } catch (e) { console.error(e); }
+        } catch (e) {
+          console.error(e);
+        }
       };
 
       /********** Shaka Player Setup **********/
@@ -171,16 +159,17 @@
         }
       });
 
+      /********** DRM & Stream **********/
       let drmConfig = {
         clearKeys: {
           "400131994b445d8c8817202248760fda": "2d56cb6f07a75b9aff165d534ae2bfc4"
         }
       };
 
-      let cookieHeader = "__hdnea__=st=1760187629~exp=1760274029~acl=/*~hmac=3d0cc86638d3b0c748af750132c0d614c02fc6daca2a2847ea2fa87c32a67d81";
+      let cookieHeader = "__hdnea__=st=1760256032~exp=1760342432~acl=/*~hmac=0c12baaff4a955ce156464ff79fbc191a3756940448a435038e0142f266ed9da";
       let streamUrl = "https://jiotvmblive.cdn.jio.com/bpk-tv/Star_Sports_HD1_Hindi_BTS/output/index.mpd";
 
-      /********** Dynamic Cookie Fetch **********/
+      /********** Fetch Dynamic Cookie **********/
       try {
         const response = await fetch('https://raw.githubusercontent.com/alex4528/m3u/refs/heads/main/jstar.m3u');
         const m3uText = await response.text();
@@ -204,7 +193,7 @@
         console.error('Failed to fetch M3U:', error);
       }
 
-      /********** Player Config **********/
+      /********** Configure Player **********/
       player.configure({
         drm: drmConfig,
         streaming: {
