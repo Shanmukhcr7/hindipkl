@@ -100,16 +100,30 @@
   <!-- Viewer Count -->
   <div id="viewerCount">Viewers: 0</div>
 
+  <!-- Chrome Only Modal -->
+  <div id="chromeModal" class="modal hidden" role="dialog" aria-modal="true">
+    <div class="modal-content">
+      <h2>Please Open in Chrome</h2>
+      <p>This site is optimized for <strong>Google Chrome</strong>. Please open the link in Chrome browser for the best experience.</p>
+    </div>
+  </div>
+
   <!-- Video Player -->
   <div class="shaka-video-container" data-shaka-player>
-    <video autoplay playsinline preload="metadata"
-      poster="https://raw.githubusercontent.com/hardiksoni85555-max/images/refs/heads/main/open%20link%20in%20chrome.png">
-    </video>
+    <video autoplay playsinline preload="metadata" poster=""></video>
   </div>
 
   <script>
     document.addEventListener('DOMContentLoaded', async () => {
+
       /********** Chrome check **********/
+      const isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+      if (!isChrome) {
+        const chromeModal = document.getElementById('chromeModal');
+        chromeModal.classList.remove('hidden');
+        chromeModal.setAttribute('aria-hidden', 'false');
+        return;
+      }
 
       /********** WebSocket Viewer Count **********/
       const viewerCountEl = document.getElementById('viewerCount');
@@ -149,13 +163,13 @@
           'quality', 'fullscreen'
         ],
         volumeBarColors: {
-          base: 'rgba(63, 187, 1, 1)',
-          level: 'rgb(255, 69, 0)'
+          base: 'rgba(255, 0, 0, 0.6)',  
+          level: 'rgb(255, 0, 0)'        
         },
         seekBarColors: {
-          base: 'rgb(41, 41, 163)',
-          buffered: 'rgb(35, 99, 3)',
-          played: 'rgba(63, 187, 1, 1)'
+          base: 'rgba(355, 175, 10, 0.3)', 
+          buffered: 'rgba(355, 140, 10, 0.6)', 
+          played: 'rgb(355, 69, 10)'      
         }
       });
 
@@ -166,7 +180,7 @@
         }
       };
 
-      let cookieHeader = "__hdnea__=st=1760256032~exp=1760342432~acl=/*~hmac=0c12baaff4a955ce156464ff79fbc191a3756940448a435038e0142f266ed9da";
+      let cookieHeader = "__hdnea__=st=1760306409~exp=1760392809~acl=/*~hmac=3aec145965a13e1164f7d206cc1554c96ca29e0fee9c0c890c20563ff6e74607";
       let streamUrl = "https://jiotvmblive.cdn.jio.com/bpk-tv/Star_Sports_HD1_Hindi_BTS/output/index.mpd";
 
       /********** Fetch Dynamic Cookie **********/
